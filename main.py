@@ -1,12 +1,12 @@
 import datahelper
-import solutions
+import cnns
 
 
 def train():
     data, label = datahelper.get_dataset()
     class_num = len(set(label))
     train_data, train_label, val_data, val_label = datahelper.split_val_set(data, label, val_split=0.2, shuffle=True)
-    cnn = solutions.CNN(class_num)
+    cnn = cnns.SCNN(class_num)
     # cnn.cload('2nd-cc-0.0000')
 
     print('\n1e-3')
@@ -34,20 +34,32 @@ def train():
     return cnn
 
 
-def inference(cnn):
+def inference(model):
     data = datahelper.get_inference_data()
-    categories = cnn.cinference(data)
-    datahelper.write_to_submission(categories.tolist(), sname=f'{cnn.name}-seventh')
+    categories = model.cinference(data)
+    datahelper.write_to_submission(categories.tolist(), sname=f'{model.name}-eighth')
     return
 
 
 def load_then_inference(name='scnn-cc-0.123-0.036'):
-    cnn = solutions.SSCNN()
+    cnn = cnns.SSCNN()
     cnn.cload(name)
     inference(cnn)
 
 
+def get_SVM():
+    data, label = datahelper.get_dataset()
+    inference_data = datahelper.get_inference_data()
+
+    from svms import SVM
+    svm = SVM(data, label, inference_data)
+    svm.ctrain()
+    svm.cvalidate()
+    return svm
+
+
 if __name__ == '__main__':
-    cnn = train()
-    inference(cnn)
+    # model = train()
+    model = get_SVM()
+    inference(model)
     # load_then_inference('scnn-cc-0.123-0.036')
