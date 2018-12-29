@@ -42,5 +42,36 @@ def split_val_set(data, label, val_split=0.2, shuffle=False):
     return data[val_idx:], label[val_idx:], data[:val_idx], label[:val_idx]
 
 
+def get_inference_data(fname='test_new'):
+    import os
+    csv_file = 'data/' + fname + '.csv'
+    npy_fname = 'data/' + fname + '.npy'
+    if os.path.exists(npy_fname):
+        data = np.load(npy_fname)
+    else:
+        ofile = csv.DictReader(open(csv_file))
+        ids = []
+        data = []
+        for r in ofile:
+            ids.append(r['id'])
+            X = np.array([float(x) for x in list(r.values())[1:]])
+            X = X.reshape((1, 64, 64))
+            data.append(X)
+
+        data = np.array(data)
+        np.save(npy_fname, data)
+
+    return data
+
+
+def write_to_submission(categories, sname='first'):
+    import pandas as pd
+    ids = range(len(categories))
+    col_ids = pd.Series(ids, name='id')
+    col_cts = pd.Series(categories, name='categories')
+    con = pd.concat([col_ids, col_cts], axis=1)
+    con.to_csv(f'submissions/{sname}.csv', index=False, sep=',')
+
+
 if __name__ == '__main__':
-    A, B = get_dataset()
+    A = get_inference_data()
