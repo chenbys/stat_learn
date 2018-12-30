@@ -38,6 +38,7 @@ def inference(model):
     data = datahelper.get_inference_data()
     categories = model.cinference(data)
     datahelper.write_to_submission(categories.tolist(), sname=f'{model.name}-eighth')
+    print('saved')
     return
 
 
@@ -58,8 +59,19 @@ def get_SVM():
     return svm
 
 
+def get_Adaboost():
+    data, label = datahelper.get_dataset()
+    inference_data = datahelper.get_inference_data()
+
+    from ensemble import Adaboost
+    model = Adaboost(data, label, inference_data)
+    model.ctrain()
+    model.cvalidate()
+    return model
+
+
 if __name__ == '__main__':
     # model = train()
-    model = get_SVM()
+    model = get_Adaboost()
     inference(model)
     # load_then_inference('scnn-cc-0.123-0.036')

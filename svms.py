@@ -10,15 +10,17 @@ class SVM(object):
     def ctrain(self):
         self.clf.fit(self.train_data, self.train_label)
 
-    def preprocess(self, data, label, inference_data, n_dim=64 * 16 * 4, val_split=0.2):
+    def preprocess(self, data, label, inference_data, n_dim=64 * 6, val_split=0.2):
+        from reduce_dimensions import by_kernel_pca
         from reduce_dimensions import by_pca
+
         import numpy as np
 
         data = data.reshape((data.shape[0], -1))
         inference_data = inference_data.reshape((inference_data.shape[0], -1))
         all_data = np.concatenate((data, inference_data))
         pca_all_data, pca_ratio = by_pca(all_data, n_dim)
-        self.name = f'{pca_ratio:.2f}-{self.name}'
+        self.name = f'pcr{pca_ratio:.2f}-{self.name}'
         pca_data, pca_inference_data = pca_all_data[0:data.shape[0]], pca_all_data[data.shape[0]:]
         idx = np.random.permutation(len(label))
         data, label = pca_data[idx], label[idx]
@@ -34,7 +36,8 @@ class SVM(object):
         res = self.clf.predict(self.val_data)
         hit = (res == self.val_label).sum()
         acc = hit / len(self.val_label)
-        print(f'svm acc: {acc:.4f} @[{hit}/{len(self.val_label)}]')
+        print(f'val svm acc: {acc:.4f} @[{hit}/{len(self.val_label)}]')
+        self.name = f'acc{val:.2f}-{self.name}'
         return acc
 
     def cinference(self, data):
