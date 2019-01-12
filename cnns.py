@@ -47,7 +47,8 @@ class CNN(nn.Module):
         val_label = torch.tensor(val_label, device=self.device, dtype=torch.long)
         train_len, val_len = len(train_label), len(val_label)
 
-        optimizer = optim.SGD(self.parameters(), lr=lr, momentum=0.9, nesterov=True, weight_decay=1e-2)
+        # optimizer = optim.SGD(self.parameters(), lr=lr, momentum=0.9, nesterov=True, weight_decay=1e-2)
+        optimizer = optim.Adam(self.parameters(), amsgrad=False, weight_decay=1e-1)
         train_acc, train_loss, val_acc, val_loss = [], [], [], []
         import time
         for epoch in range(epoch_num):
@@ -105,10 +106,10 @@ class CNN(nn.Module):
 
     def csave(self, prefix='cc'):
         torch.save(self.state_dict(),
-                   f'params/{self.name}-{prefix}-{self.train_loss[-1]:.3f}-{self.val_loss[-1]:.3f}.pkl')
+                   f'params2/{self.name}-{prefix}-{self.train_loss[-1]:.3f}-{self.val_loss[-1]:.3f}.pkl')
 
     def cload(self, lname='cnn'):
-        self.load_state_dict(torch.load(f'params/{lname}.pkl'))
+        self.load_state_dict(torch.load(f'params2/{lname}.pkl'))
 
     def ctest(self):
         pass

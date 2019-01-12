@@ -4,13 +4,13 @@ import time
 
 
 class Adaboost(object):
-    def __init__(self, data, label, inference_data, learning_rate=1., n_estimators=500, name='adaboost'):
-        self.name = name
+    def __init__(self, data, label, inference_data, learning_rate=1., n_estimators=90, max_depth=4, name='adaboost'):
+        self.name = f'{n_estimators}base{max_depth}-{name}'
         self.preprocess(data, label, inference_data)
-        dt_stump = DecisionTreeClassifier(max_depth=3, min_samples_leaf=1)
+        dt_stump = DecisionTreeClassifier(max_depth=max_depth, min_samples_leaf=1)
         dt_stump.fit(self.train_data, self.train_label)
-        dt_stump_err = 1.0 - dt_stump.score(self.train_data, self.train_label)
-        print(f'stump err: {dt_stump_err}')
+        dt_stump_acc = dt_stump.score(self.train_data, self.train_label)
+        print(f'stump acc: {dt_stump_acc}')
 
         self.model = AdaBoostClassifier(
             base_estimator=dt_stump,
@@ -21,14 +21,14 @@ class Adaboost(object):
     def ctrain(self):
         t1 = time.time()
         self.model.fit(self.train_data, self.train_label)
-        print(f'time for train: {(time.time()-t1)/60:.1f}s')
+        print(f'time for train: {(time.time()-t1)/60:.1f}m')
         train_acc = (self.model.predict(self.train_data) == self.train_label).sum() / len(self.train_label)
         print(f'train acc:{train_acc}')
         self.name = f'train{train_acc:.2f}-{self.name}'
         return
 
     def preprocess(self, data, label, inference_data, n_dim=64 * 16, val_split=0.2):
-        from reduce_dimensions import by_pca
+        from preprocess import by_pca
         import numpy as np
 
         data = data.reshape((data.shape[0], -1))

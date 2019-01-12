@@ -19,7 +19,7 @@ def load_dataset_from_csv(set_file='data/train.csv'):
     return data, label
 
 
-def get_dataset(type='train'):
+def get_dataset(type='train',):
     import os
     file = 'data/' + type + '.csv'
     data_fname, label_fname = 'data/' + type + '_data.npy', 'data/' + type + '_label.npy'
@@ -70,7 +70,7 @@ def write_to_submission(categories, sname='first'):
     col_ids = pd.Series(ids, name='id')
     col_cts = pd.Series(categories, name='categories')
     con = pd.concat([col_ids, col_cts], axis=1)
-    con.to_csv(f'submissions/{sname}.csv', index=False, sep=',')
+    con.to_csv(f'submissions2/{sname}.csv', index=False, sep=',')
 
 
 if __name__ == '__main__':

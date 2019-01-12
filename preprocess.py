@@ -15,3 +15,14 @@ def by_kernel_pca(data, n_components):
     reduced = kpca.fit_transform(data)
     # print(kpca.explained_variance_ratio_.sum())
     return reduced, 1
+
+
+def normlize(data, n_components):
+    from sklearn import preprocessing
+    normalizer = preprocessing.Normalizer().fit(data)
+    normalized = normalizer.transform(data)
+    return normalized, n_components
+
+
+def row(data, n_components):
+    return data, n_components
