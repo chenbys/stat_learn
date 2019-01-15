@@ -19,7 +19,7 @@ def load_dataset_from_csv(set_file='data/train.csv'):
     return data, label
 
 
-def get_dataset(type='train',):
+def get_dataset(type='train', ):
     import os
     file = 'data/' + type + '.csv'
     data_fname, label_fname = 'data/' + type + '_data.npy', 'data/' + type + '_label.npy'
@@ -64,6 +64,13 @@ def get_inference_data(fname='test_new'):
     return data
 
 
+def get_mess_label(fname='0.92200@svm1ovo-pcr768.00-train0.99-vld1.00.csv'):
+    csv_file = f'data/{fname}'
+    import pandas as pd
+    a = pd.read_csv(csv_file)
+    return a['categories'].tolist()
+
+
 def write_to_submission(categories, sname='first'):
     import pandas as pd
     ids = range(len(categories))
@@ -74,4 +81,4 @@ def write_to_submission(categories, sname='first'):
 
 
 if __name__ == '__main__':
-    A = get_inference_data()
+    A = get_mess_label()

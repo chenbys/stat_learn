@@ -40,7 +40,8 @@ class CNN(nn.Module):
         x = self.fc2(x)
         return F.log_softmax(x, dim=1)
 
-    def ctrain(self, train_data, train_label, val_data, val_label, lr=1e-5, batch_size=4, epoch_num=50, shuffle=True):
+    def ctrain(self, train_data, train_label, val_data, val_label,
+               lr=1e-5, wd=5e-4, batch_size=4, epoch_num=50, shuffle=True):
         train_data = torch.tensor(train_data, device=self.device, dtype=torch.float32)
         train_label = torch.tensor(train_label, device=self.device, dtype=torch.long)
         val_data = torch.tensor(val_data, device=self.device, dtype=torch.float32)
@@ -48,7 +49,9 @@ class CNN(nn.Module):
         train_len, val_len = len(train_label), len(val_label)
 
         # optimizer = optim.SGD(self.parameters(), lr=lr, momentum=0.9, nesterov=True, weight_decay=1e-2)
-        optimizer = optim.Adam(self.parameters(), amsgrad=False, weight_decay=1e-1)
+        # optimizer = optim.Adam(self.parameters(), amsgrad=False, weight_decay=wd, lr=lr)
+        optimizer = optim.Adam(self.parameters())
+
         train_acc, train_loss, val_acc, val_loss = [], [], [], []
         import time
         for epoch in range(epoch_num):
