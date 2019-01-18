@@ -1,6 +1,5 @@
 import datahelper
 import cnns
-import vgg
 import argparse
 
 
@@ -11,41 +10,12 @@ def pad_3(data):
 
 def train():
     data, label = datahelper.get_dataset()
-    data = pad_3(data)
-    class_num = len(set(label))
-    train_data, train_label, val_data, val_label = datahelper.split_val_set(data, label, val_split=0.5, shuffle=True)
+    # data = pad_3(data)
+    train_data, train_label, val_data, val_label = datahelper.split_val_set(data, label, val_split=0.1, shuffle=True)
 
-    # cnn = cnns.SSCNN(name='SSCNN-adam-val0.1-epoch50')
-    # cnn.ctrain(train_data, train_label, val_data, val_label, lr=1e-3, epoch_num=50)
-    # cnn.csave()
+    cnn = cnns.SSCNN(name='val0.1-epoch20')
+    cnn.ctrain(train_data, train_label, val_data, val_label, lr=1e-3, epoch_num=30)
 
-    cnn = vgg.VGG(name='val0.5-epoch50')
-    cnn.load_pretrained()
-    cnn.ctrain(train_data, train_label, val_data, val_label, lr=1e-3, epoch_num=50)
-
-    # cnn.cload('val0.1-epoch50VGG11-27-0.089-0.057')
-    # print('\n1e-3')
-    # cnn.ctrain(train_data, train_label, val_data, val_label, lr=1e-3, epoch_num=20)
-    # cnn.csave()
-    #
-    # print('\n1e-4')
-    # cnn.ctrain(train_data, train_label, val_data, val_label, lr=1e-4, epoch_num=10)
-    # cnn.csave()
-    #
-    # print('\n1e-5')
-    # cnn.ctrain(train_data, train_label, val_data, val_label, lr=1e-5, epoch_num=10)
-    # cnn.csave()
-    #
-    # print('\n1e-6')
-    # cnn.ctrain(train_data, train_label, val_data, val_label, lr=1e-6, epoch_num=10)
-    # cnn.csave()
-    #
-    # print('\n1e-7')
-    # cnn.ctrain(train_data, train_label, val_data, val_label, lr=1e-7, epoch_num=10)
-    # cnn.csave()
-
-    # print(cnn.train_loss)
-    # print(cnn.val_loss)
     return cnn
 
 

@@ -4,7 +4,7 @@ import time
 
 
 class Adaboost(object):
-    def __init__(self, data, label, inference_data, learning_rate=1., n_estimators=90, max_depth=4, name='adaboost'):
+    def __init__(self, data, label, inference_data, learning_rate=1., n_estimators=200, max_depth=4, name='adaboost'):
         self.name = f'{n_estimators}base{max_depth}-{name}'
         self.preprocess(data, label, inference_data)
         dt_stump = DecisionTreeClassifier(max_depth=max_depth, min_samples_leaf=1)

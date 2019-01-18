@@ -12,7 +12,7 @@ def pad_3(data):
 def train():
     data, label = datahelper.get_dataset()
     data = pad_3(data)
-    val_split = 0.001
+    val_split = 0.1
     train_data, train_label, val_data, val_label = datahelper.split_val_set(data, label,
                                                                             val_split=val_split, shuffle=True)
     cnn = vgg.VGG('dropout_smlrbgwd')

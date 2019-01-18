@@ -14,14 +14,25 @@ def train():
     mess_train_data = np.concatenate((train_data, kaggle_data), axis=0)
     mess_train_label = np.concatenate((train_label, kaggle_label))
 
-    cnn = cnns.SCNN(name='SCNN-TS')
+    cnn = cnns.SSCNN(name='SSCNN')
+    train_loss, train_acc = [], []
+    val_loss, val_acc = [], []
+
     for i in range(3):
         print('\nNormal training===================================================================')
         cnn.ctrain(train_data, train_label, val_data, val_label,
-                   lr=1e-1, wd=1e-2, epoch_num=20)
+                   lr=1e-1, wd=1e-2, epoch_num=10)
+        train_loss += cnn.train_loss
+        train_acc += cnn.train_acc
+        val_loss += cnn.val_loss
+        val_acc += cnn.val_acc
         print('\nMess training========================================================================')
         cnn.ctrain(mess_train_data, mess_train_label, val_data, val_label,
-                   lr=1e-1, wd=1e-2, epoch_num=20)
+                   lr=1e-1, wd=1e-2, epoch_num=10)
+        train_loss += cnn.train_loss
+        train_acc += cnn.train_acc
+        val_loss += cnn.val_loss
+        val_acc += cnn.val_acc
     return cnn
 
 

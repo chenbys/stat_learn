@@ -17,13 +17,6 @@ def get_SVM(pca_dim=64 * 64):
 
     from svms import SVM
     svm = SVM(data, label, inference_data, pca_dim=pca_dim, name='TS-SVM')
-    for i in range(5):
-        svm.ctrain()
-        svm.cvalidate()
-
-        svm.TS_train(mess_label)
-        svm.cvalidate()
-
     svm.ctrain()
     svm.cvalidate()
     print('inference')
